@@ -80,11 +80,11 @@ class Concentration {
     
     // Method to reset the game state
     func resetGame() {
+        // Reset the score and flip count
         score = 0
         flipCount = 0
         
-        // Reset the score and flip count
-        for index in cards.indices {
+       for index in cards.indices {
             if cards[index].isFaceUp {
                 cards[index].isFaceUp = false
             }
