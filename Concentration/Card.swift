@@ -19,7 +19,7 @@ struct Card {
     var identifier: Int
     
     // Static variable to keep track of the identifier generation
-    static var identifierFactory = 0
+    private static var identifierFactory = 0
     
     // Initializer to create a new card instance with a unique identifier
     init() {
@@ -27,7 +27,7 @@ struct Card {
     }
     
     // Static method to generate a unique identifier for a card
-    static func getUniqueIdentifier() -> Int {
+    private static func getUniqueIdentifier() -> Int {
         identifierFactory += 1
         return identifierFactory
     }

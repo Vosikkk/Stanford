@@ -13,10 +13,10 @@ class Concentration {
     
     // Player's score
     private(set) var score = 0
-   
+    
     // Number of flips made by the player
     private(set) var flipCount = 0
-   
+    
     // Computed property to find the index of the one and only face-up card (if any)
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
@@ -33,6 +33,7 @@ class Concentration {
     
     // Initializer to create a new instance of the Concentration game
     init(numberOfPairsOfCards: Int) {
+        assert(numberOfPairsOfCards > 0, "Concentration.init(\(numberOfPairsOfCards)): you must have at list one pair of cards")
         for _ in 1...numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
@@ -46,6 +47,7 @@ class Concentration {
     
     // Method to handle card selection during the game
     func chooseCard(at index: Int) {
+        assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not in the cards")
         
         flipCount += 1
         
@@ -84,7 +86,7 @@ class Concentration {
         score = 0
         flipCount = 0
         
-       for index in cards.indices {
+        for index in cards.indices {
             if cards[index].isFaceUp {
                 cards[index].isFaceUp = false
             }
