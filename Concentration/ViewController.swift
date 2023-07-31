@@ -14,13 +14,13 @@ class ViewController: UIViewController {
      
    
     // Make our pairs of cards 
-    var numberOfPairsOfCards: Int {
+    private var numberOfPairsOfCards: Int {
        
         return cardButtons.count/2 
     }
     
     // Dictionary to store emojis for each card identifier
-    private var emoji = [Int: String]()
+    private var emoji = [Card: String]()
    
     // Index to keep track of the current theme
     private var currentThemeIndex = 0
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         Theme(name: "food", emoji: ["🍕","🥖","🥐","🍤","🍖","🍔","🧀","🥩","🍨","🍭"]),
         Theme(name: "drinks", emoji:  ["🥛","🍼","🥂","🍷","🍻","🍹","🍸","🍺","☕️","🧋","🥤"])
     ]
-
+    
     // Outlets for UI elements
     @IBOutlet private weak var scoreLabel: UILabel!
     @IBOutlet private weak var flipCountLabel: UILabel!
@@ -71,8 +71,9 @@ class ViewController: UIViewController {
     // Update the UI elements based on the current game state
    private func updateViewFromModel() {
         
-        flipCountLabel.text = "Flips: \(game.flipCount)"
         scoreLabel.text = "Score: \(game.score)"
+        updateFlipCountLabel()
+        
         
        // Update each card button based on its corresponding card in the game
         for index in cardButtons.indices {
@@ -105,11 +106,23 @@ class ViewController: UIViewController {
     
     // Get the corresponding emoji for a card identifier, and store it in the dictionary for reuse
    private func emoji(for card: Card) -> String {
-        if emoji[card.identifier] == nil, emojiChoices.count > 0 {
-            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        if emoji[card] == nil, emojiChoices.count > 0 {
+            emoji[card] = emojiChoices.remove(at: emojiChoices.count.arc4random)
         }
         
-        return emoji[card.identifier] ?? "?"
+        return emoji[card] ?? "?"
+    }
+    
+    
+    // Here we just change view of our flip label
+    private func updateFlipCountLabel() {
+        
+        let attributedText = NSAttributedString(string: "Flips: \(game.flipCount)",
+                                                 attributes: [
+             .strokeWidth: 5.0,
+             .strokeColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+         ])
+        flipCountLabel.attributedText =  attributedText
     }
 }
 

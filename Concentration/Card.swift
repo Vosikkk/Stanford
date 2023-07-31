@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Card {
+struct Card: Hashable {
     
     // Boolean flag indicating if the card is face-up (visible to the player)
     var isFaceUp = false
@@ -16,7 +16,7 @@ struct Card {
     var isMatched = false
     
     // Unique identifier for the card
-    var identifier: Int
+    private var identifier: Int
     
     // Static variable to keep track of the identifier generation
     private static var identifierFactory = 0

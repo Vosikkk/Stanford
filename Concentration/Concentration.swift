@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Concentration {
+struct Concentration {
     // Array to store the cards in the game
     private(set) var cards = [Card]()
     
@@ -16,12 +16,13 @@ class Concentration {
     
     // Number of flips made by the player
     private(set) var flipCount = 0
+        
+    
     
     // Computed property to find the index of the one and only face-up card (if any)
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
-            let indexOfOpenCards = cards.indices.filter{ cards[$0].isFaceUp }
-            return indexOfOpenCards.count == 1 ? indexOfOpenCards.first : nil
+          return cards.indices.filter{ cards[$0].isFaceUp }.oneAndOnly
         }
         set {
             // Set all cards' faceUp status based on whether their index matches the new value
@@ -46,7 +47,7 @@ class Concentration {
     
     
     // Method to handle card selection during the game
-    func chooseCard(at index: Int) {
+   mutating func chooseCard(at index: Int) {
         assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not in the cards")
         
         flipCount += 1
@@ -56,7 +57,7 @@ class Concentration {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 
                 // Two cards are face-up, check if they match
-                if cards[matchIndex].identifier == cards[index].identifier {
+                if cards[matchIndex] == cards[index] {
                     
                     // Cards match, mark them as matched and update the score
                     cards[matchIndex].isMatched = true
@@ -81,7 +82,7 @@ class Concentration {
     }
     
     // Method to reset the game state
-    func resetGame() {
+   mutating func resetGame() {
         // Reset the score and flip count
         score = 0
         flipCount = 0
@@ -94,5 +95,12 @@ class Concentration {
                 cards[index].isMatched = false
             }
         }
+    }
+}
+
+// All types which confirm this protocol(Collection), now can depends on it length return first(and single elemnt) or nil if length isn't one
+extension Collection {
+    var oneAndOnly: Element? {
+        return count == 1 ? first : nil
     }
 }
