@@ -95,7 +95,7 @@ class ViewController: UIViewController {
        assert(themes.count > 0, "ViewController.theme our storage of emojies is empty, please add some emojies")
        // Repeat until a different theme index is chosen
        repeat {
-           randomThemeIndex = themes.count.arc4random
+           randomThemeIndex = Int.random(in: 0..<themes.count)
        } while randomThemeIndex == currentThemeIndex
       
        // Update the current theme index and emoji choices array
@@ -107,7 +107,7 @@ class ViewController: UIViewController {
     // Get the corresponding emoji for a card identifier, and store it in the dictionary for reuse
    private func emoji(for card: Card) -> String {
         if emoji[card] == nil, emojiChoices.count > 0 {
-            emoji[card] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+            emoji[card] = emojiChoices.remove(at: Int.random(in: 0..<emojiChoices.count))
         }
         
         return emoji[card] ?? "?"
@@ -126,16 +126,4 @@ class ViewController: UIViewController {
     }
 }
 
-// Generate random index
-extension Int {
-    var arc4random: Int {
-        if self > 0 {
-            return Int(arc4random_uniform(UInt32(self)))
-        } else if self < 0 {
-            return -Int(arc4random_uniform(UInt32(abs(self))))
-        } else {
-            return 0
-        }
-    }
-}
 
