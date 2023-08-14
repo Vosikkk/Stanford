@@ -7,7 +7,16 @@
 
 import Foundation
 
-struct Card: Hashable {
+struct Card: Hashable, Equatable {
+    
+    func hash(into hasher: inout Hasher) {
+           hasher.combine(identifier)
+       }
+       
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+           return lhs.identifier == rhs.identifier
+       }
+       
     
     // Boolean flag indicating if the card is face-up (visible to the player)
     var isFaceUp = false

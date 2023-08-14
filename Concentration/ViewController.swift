@@ -23,20 +23,11 @@ class ViewController: UIViewController {
     private var emoji = [Card: String]()
    
     // Index to keep track of the current theme
-    private var currentThemeIndex = 0
+    private var currentIndex = 0
    
     // Array to hold the emoji choices for the current theme
     private var emojiChoices: [String] = []
    
-    // Array of themes, each with a name and emoji choices
-    private let themes = [
-        Theme(name: "fruit", emoji: ["🍎", "🍌", "🍇", "🍊", "🍓", "🍍", "🍑", "🍒", "🍉", "🥝"]),
-        Theme(name: "animals", emoji: ["🐶", "🐱", "🐼", "🐸", "🐢", "🐯", "🦁", "🦊", "🦄", "🐧"]),
-        Theme(name: "nature", emoji: ["🌳","🪴","🌹","☘️","🌿","🎄","🍀","🌾","🌺","🥀"]),
-        Theme(name: "planets", emoji: ["🌞","🌝","🌛","🌜","🌚","🌎","🌘","🪐","🌙","🌖"]),
-        Theme(name: "food", emoji: ["🍕","🥖","🥐","🍤","🍖","🍔","🧀","🥩","🍨","🍭"]),
-        Theme(name: "drinks", emoji:  ["🥛","🍼","🥂","🍷","🍻","🍹","🍸","🍺","☕️","🧋","🥤"])
-    ]
     
     // Outlets for UI elements
     @IBOutlet private weak var scoreLabel: UILabel!
@@ -91,23 +82,23 @@ class ViewController: UIViewController {
     
     // Set a random theme for the game
    private func setRandomTheme() {
-       var randomThemeIndex: Int
-       assert(themes.count > 0, "ViewController.theme our storage of emojies is empty, please add some emojies")
+       var randomIndex: Int
+       assert(Theme.getAmountOfThemes() > 0, "ViewController.theme our storage of emojies is empty, please add some emojies")
        // Repeat until a different theme index is chosen
        repeat {
-           randomThemeIndex = Int.random(in: 0..<themes.count)
-       } while randomThemeIndex == currentThemeIndex
+           randomIndex = Theme.getAmountOfThemes().random()
+       } while randomIndex == currentIndex
       
        // Update the current theme index and emoji choices array
-       currentThemeIndex = randomThemeIndex
-       emojiChoices = themes[currentThemeIndex].emoji
+       currentIndex = randomIndex
+       emojiChoices = Theme.get(by: randomIndex)
     }
     
     
     // Get the corresponding emoji for a card identifier, and store it in the dictionary for reuse
    private func emoji(for card: Card) -> String {
         if emoji[card] == nil, emojiChoices.count > 0 {
-            emoji[card] = emojiChoices.remove(at: Int.random(in: 0..<emojiChoices.count))
+            emoji[card] = emojiChoices.remove(at: emojiChoices.count.random())
         }
         
         return emoji[card] ?? "?"
@@ -118,7 +109,7 @@ class ViewController: UIViewController {
     private func updateFlipCountLabel() {
         
         let attributedText = NSAttributedString(string: "Flips: \(game.flipCount)",
-                                                 attributes: [
+                                                attributes: [
              .strokeWidth: 5.0,
              .strokeColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
          ])
@@ -126,4 +117,13 @@ class ViewController: UIViewController {
     }
 }
 
+
+
+// Don't want to repeat Int.random ))
+extension Int {
+    func random() -> Int {
+        guard self > 0 else { return 0 }
+        return Int.random(in: 0..<self)
+    }
+}
 
